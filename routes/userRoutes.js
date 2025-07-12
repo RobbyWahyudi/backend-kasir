@@ -11,8 +11,10 @@ router.get("/me", verifyToken, (req, res) => {
     user: req.user, // Diambil dari token yang sudah dicek
   });
 });
+
 // Semua endpoint diamankan dengan token
 router.get("/", verifyToken, checkRole(["admin"]), userController.getAllUsers);
+
 router.get(
   "/:id",
   verifyToken,
@@ -20,12 +22,14 @@ router.get(
   userController.getUserById
 );
 router.post("/", verifyToken, checkRole(["admin"]), userController.createUser);
+
 router.put(
   "/:id",
   verifyToken,
   checkRole(["admin"]),
   userController.updateUser
 );
+
 router.delete(
   "/:id",
   verifyToken,

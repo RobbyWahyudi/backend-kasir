@@ -13,7 +13,7 @@ exports.getAllProducts = (req, res) => {
 
 // Tambah produk baru
 exports.createProduct = (req, res) => {
-  const { name, category, price, stock } = req.body;
+  const { name, category, price, stock_kantin } = req.body;
 
   if (!name || !category || !price) {
     return res
@@ -22,37 +22,43 @@ exports.createProduct = (req, res) => {
   }
 
   const sql =
-    "INSERT INTO products (name, category, price, stock) VALUES (?, ?, ?, ?)";
-  db.query(sql, [name, category, price, stock || 0], (err, result) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ message: "Gagal menambahkan produk", error: err });
+    "INSERT INTO products (name, category, price, stock_gudang, stock_kantin) VALUES (?, ?, ?, ?, ?)";
+  db.query(
+    sql,
+    [name, category, price, stock_kantin, stock_kantin || 0],
+    (err, result) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ message: "Gagal menambahkan produk", error: err });
 
-    res
-      .status(201)
-      .json({
+      res.status(201).json({
         message: "Produk berhasil ditambahkan",
         productId: result.insertId,
       });
-  });
+    }
+  );
 };
 
 // Update produk
 exports.updateProduct = (req, res) => {
   const { id } = req.params;
-  const { name, category, price, stock } = req.body;
+  const { name, category, price, stock_gudang, stock_kantin } = req.body;
 
   const sql =
-    "UPDATE products SET name = ?, category = ?, price = ?, stock = ? WHERE id = ?";
-  db.query(sql, [name, category, price, stock, id], (err, result) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ message: "Gagal mengupdate produk", error: err });
+    "UPDATE products SET name = ?, category = ?, price = ?, stock_gudang = ?, stock_kantin = ? WHERE id = ?";
+  db.query(
+    sql,
+    [name, category, price, stock_gudang, stock_kantin, id],
+    (err, result) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ message: "Gagal mengupdate produk", error: err });
 
-    res.json({ message: "Produk berhasil diupdate" });
-  });
+      res.json({ message: "Produk berhasil diupdate" });
+    }
+  );
 };
 
 // Hapus produk

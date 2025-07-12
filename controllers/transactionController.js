@@ -59,7 +59,7 @@ exports.createTransaction = (req, res) => {
           items.forEach((item) => {
             if (item.item_type === "product") {
               const updateStockQuery =
-                "UPDATE products SET stock = stock - ? WHERE id = ?";
+                "UPDATE products SET stock_kantin = stock_kantin - ? WHERE id = ?";
               db.query(updateStockQuery, [item.quantity, item.item_id]);
             }
           });
@@ -72,32 +72,32 @@ exports.createTransaction = (req, res) => {
 };
 
 // Ambil riwayat transaksi berdasarkan user login
-exports.getMyTransactions = (req, res) => {
-  const userId = req.user.id;
+// exports.getMyTransactions = (req, res) => {
+//   const userId = req.user.id;
 
-  const sql = `
-    SELECT 
-      t.id AS transaction_id,
-      t.type,
-      t.total,
-      t.payment_method,
-      t.created_at,
-      ti.item_name,
-      ti.quantity,
-      ti.price,
-      ti.subtotal
-    FROM transactions t
-    JOIN transaction_items ti ON t.id = ti.transaction_id
-    WHERE t.user_id = ?
-    ORDER BY t.created_at DESC
-  `;
+//   const sql = `
+//     SELECT
+//       t.id AS transaction_id,
+//       t.type,
+//       t.total,
+//       t.payment_method,
+//       t.created_at,
+//       ti.item_name,
+//       ti.quantity,
+//       ti.price,
+//       ti.subtotal
+//     FROM transactions t
+//     JOIN transaction_items ti ON t.id = ti.transaction_id
+//     WHERE t.user_id = ?
+//     ORDER BY t.created_at DESC
+//   `;
 
-  db.query(sql, [userId], (err, results) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ message: "Gagal mengambil riwayat", error: err });
+//   db.query(sql, [userId], (err, results) => {
+//     if (err)
+//       return res
+//         .status(500)
+//         .json({ message: "Gagal mengambil riwayat", error: err });
 
-    res.json(results);
-  });
-};
+//     res.json(results);
+//   });
+// };
