@@ -13,7 +13,7 @@ router.get("/me", verifyToken, (req, res) => {
 });
 
 // Semua endpoint diamankan dengan token
-router.get("/", verifyToken, checkRole(["admin"]), userController.getAllUsers);
+router.get("/", userController.getAllUsers);
 
 router.get(
   "/:id",
